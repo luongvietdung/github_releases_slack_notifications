@@ -1,0 +1,49 @@
+version: "2"
+services:
+  web:
+    build: ./docker/web
+    container_name: docker_github_releases_slack_notifications_web
+    tty: true
+    depends_on:
+      - db
+    environment:
+      RAILS_ENV: development
+      BUNDLE_PATH: /usr/local/bundle
+    networks:
+      vpcbr:
+        ipv4_address: 10.0.0.2
+    volumes:
+      - gem_cache:/usr/local/bundle/gems
+      - node_modules:/rails-app/node_modules
+      - .:/rails-app
+  db:
+    build: ./docker/mysql
+    container_name: docker_github_releases_slack_notifications_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      vpcbr:
+        ipv4_address: 10.0.0.3
+  proxy:
+    build: ./docker/nginx
+    container_name: docker_github_releases_slack_notifications_proxy
+    ports:
+      - "81:81"
+    depends_on:
+      - web
+    networks:
+      vpcbr:
+        ipv4_address: 10.0.0.4
+volumes:
+  gem_cache:
+  node_modules:
+  db_data:
+networks:
+  vpcbr:
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 10.0.0.0/16
+         gateway: 10.0.0.1
