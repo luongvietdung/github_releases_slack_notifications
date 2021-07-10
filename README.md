@@ -1,24 +1,51 @@
-# README
+# Github releases Slack notificcations
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Development(Docker)
 
-Things you may want to cover:
+### Installation
 
-* Ruby version
+#### 1. Init
 
-* System dependencies
+```bash
+git clone --recursive git@github.com:luongvietdung/github_releases_slack_notifications.git
+cd github_releases_slack_notifications
+```
 
-* Configuration
+#### 2. Create database
 
-* Database creation
+```bash
+docker-compose up
+docker-compose exec web bundle install
+docker-compose exec web bundle exec rails db:setup
+```
 
-* Database initialization
+### Usage
 
-* How to run the test suite
+#### Start Docker
 
-* Services (job queues, cache servers, search engines, etc.)
+```bash
+docker-compose up
+```
 
-* Deployment instructions
+#### Bundle Install
 
-* ...
+```bash
+docker-compose exec web bundle install
+```
+
+#### Start Server
+
+```bash
+docker-compose exec web bundle exec rails s -b 0.0.0.0
+```
+
+### Endpoints
+
+- http://localhost:81
+
+#### Remove Docker
+
+```bash
+docker-compose down
+docker-compose down --rmi all # If you also want to delete container image
+```
