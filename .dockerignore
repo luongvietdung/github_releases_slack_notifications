@@ -1,0 +1,6 @@
+/docker
+/.git
+.gitignore
+docker-compose.yml
+/.circleci
+/.github
