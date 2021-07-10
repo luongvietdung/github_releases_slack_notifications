@@ -1,7 +1,9 @@
-version: "2"
+version: "3"
 services:
   web:
-    build: ./docker/web
+    build:
+      context: .
+      dockerfile: docker/web/Dockerfile
     container_name: docker_github_releases_slack_notifications_web
     tty: true
     depends_on:
@@ -9,11 +11,14 @@ services:
     environment:
       RAILS_ENV: development
       BUNDLE_PATH: /usr/local/bundle
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_HOST: db
     networks:
       vpcbr:
         ipv4_address: 10.0.0.2
     volumes:
-      - gem_cache:/usr/local/bundle/gems
+      - bundle_cache:/usr/local/bundle
       - node_modules:/rails-app/node_modules
       - .:/rails-app
   db:
@@ -37,7 +42,7 @@ services:
       vpcbr:
         ipv4_address: 10.0.0.4
 volumes:
-  gem_cache:
+  bundle_cache:
   node_modules:
   db_data:
 networks:
